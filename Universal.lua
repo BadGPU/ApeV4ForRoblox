@@ -1,3 +1,4 @@
+--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
@@ -47,7 +48,7 @@ end
 
 local function vapeGithubRequest(scripturl)
 	if not isfile("vape/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/BadGPU/ApeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		assert(suc, res)
 		assert(res ~= "404: Not Found", res)
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
@@ -315,14 +316,14 @@ do
 		local whitelistloaded
 		whitelistloaded = pcall(function()
 			local commit = "main"
-			for i,v in pairs(game:HttpGet("https://github.com/7GrandDadPGN/whitelists"):split("\n")) do 
+			for i,v in pairs(game:HttpGet("https://github.com/BadGPU/whitelists"):split("\n")) do 
 				if v:find("commit") and v:find("fragment") then 
 					local str = v:split("/")[5]
 					commit = str:sub(0, str:find('"') - 1)
 					break
 				end
 			end
-			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/whitelists/"..commit.."/whitelist2.json", true))
+			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/BadGPU/whitelists/"..commit.."/whitelist2.json", true))
 			local yeahok = 'playerattackable = (not tab) or (not (type(tab) == "table" and tab.invulnerable or true)) '
 			for i, v in pairs(WhitelistFunctions.WhitelistTable) do 
 				local orig = v
