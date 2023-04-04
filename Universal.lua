@@ -47,7 +47,7 @@ end
 
 local function vapeGithubRequest(scripturl)
 	if not isfile("vape/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/BadGPU/ApeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		assert(suc, res)
 		assert(res ~= "404: Not Found", res)
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
@@ -299,133 +299,229 @@ local function AllNearPosition(distance, amount, checktab)
 	return returnedplayer
 end
 
-print("Loading Whitelist System....")
+local WhitelistFunctions = {StoredHashes = {}, PriorityList = {
+	["VAPE OWNER"] = 3,
+	["VAPE PRIVATE"] = 2,
+	Default = 1
+}, WhitelistTable = {}, Loaded = false, CustomTags = {}}
+do
+	local shalib
+	WhitelistFunctions.WhitelistTable = {
+		players = {},
+		owners = {},
+		chattags = {}
+	}
+	task.spawn(function()
+		local whitelistloaded
+		whitelistloaded = pcall(function()
+			local commit = "main"
+			for i,v in pairs(game:HttpGet("https://github.com/7GrandDadPGN/whitelists"):split("\n")) do 
+				if v:find("commit") and v:find("fragment") then 
+					local str = v:split("/")[5]
+					commit = str:sub(0, str:find('"') - 1)
+					break
+				end
+			end
+			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/whitelists/"..commit.."/whitelist2.json", true))
+			local yeahok = 'playerattackable = (not tab) or (not (type(tab) == "table" and tab.invulnerable or true)) '
+			for i, v in pairs(WhitelistFunctions.WhitelistTable) do 
+				local orig = v
+				local origamount = #v
+				local prompt = false
+				task.spawn(function()
+					repeat
+						if WhitelistFunctions.WhitelistTable[i] ~= orig or #WhitelistFunctions.WhitelistTable[i] ~= origamount or #yeahok ~= 90 then 
+							if not prompt then 
+								prompt = true
+								local bkg = Instance.new("Frame")
+								bkg.Size = UDim2.new(1, 0, 1, 36)
+								bkg.Position = UDim2.new(0, 0, 0, -36)
+								bkg.BorderSizePixel = 0
+								bkg.Parent = game.CoreGui.RobloxGui
+								bkg.BackgroundTransparency = 1
+								bkg.BackgroundColor3 = Color3.new()
+								local widgetbkg = Instance.new("ImageButton")
+								widgetbkg.AnchorPoint = Vector2.new(0.5, 0.5)
+								widgetbkg.Position = UDim2.new(0.5, 0, 0.5, 30)
+								widgetbkg.Size = UDim2.fromScale(0.45, 0.6)
+								widgetbkg.Modal = true 
+								widgetbkg.Image = ""
+								widgetbkg.BackgroundTransparency = 1
+								widgetbkg.Parent = bkg
+								local widgetheader = Instance.new("Frame")
+								widgetheader.BackgroundColor3 = Color3.fromRGB(100, 103, 167)
+								widgetheader.Size = UDim2.new(1, 0, 0, 40)
+								widgetheader.Parent = widgetbkg
+								local widgetheader2 = Instance.new("Frame")
+								widgetheader2.BackgroundColor3 = Color3.fromRGB(100, 103, 167)
+								widgetheader2.Position = UDim2.new(0, 0, 1, -10)
+								widgetheader2.BorderSizePixel = 0
+								widgetheader2.Size = UDim2.new(1, 0, 0, 10)
+								widgetheader2.Parent = widgetheader
+								local widgetheadertext = Instance.new("TextLabel")
+								widgetheadertext.BackgroundTransparency = 1
+								widgetheadertext.Size = UDim2.new(1, -10, 1, 0)
+								widgetheadertext.Position = UDim2.new(0, 10, 0, 0)
+								widgetheadertext.RichText = true
+								widgetheadertext.TextXAlignment = Enum.TextXAlignment.Left
+								widgetheadertext.TextSize = 18
+								widgetheadertext.Font = Enum.Font.Roboto
+								widgetheadertext.Text = "<b>Vape</b>"
+								widgetheadertext.TextColor3 = Color3.new(1, 1, 1)
+								widgetheadertext.Parent = widgetheader
+								local widgetheadercorner = Instance.new("UICorner")
+								widgetheadercorner.CornerRadius = UDim.new(0, 10)
+								widgetheadercorner.Parent = widgetheader
+								local widgetcontent2 = Instance.new("Frame")
+								widgetcontent2.BackgroundColor3 = Color3.fromRGB(78, 80, 130)
+								widgetcontent2.Position = UDim2.new(0, 0, 0, 40)
+								widgetcontent2.BorderSizePixel = 0
+								widgetcontent2.Size = UDim2.new(1, 0, 0, 10)
+								widgetcontent2.Parent = widgetbkg
+								local widgetcontent = Instance.new("Frame")
+								widgetcontent.BackgroundColor3 = Color3.fromRGB(78, 80, 130)
+								widgetcontent.Size = UDim2.new(1, 0, 1, -40)
+								widgetcontent.Position = UDim2.new(0, 0, 0, 40)
+								widgetcontent.Parent = widgetbkg
+								local widgetcontentcorner = Instance.new("UICorner")
+								widgetcontentcorner.CornerRadius = UDim.new(0, 10)
+								widgetcontentcorner.Parent = widgetcontent
+								local widgetpadding = Instance.new("UIPadding")
+								widgetpadding.PaddingBottom = UDim.new(0, 15)
+								widgetpadding.PaddingTop = UDim.new(0, 15)
+								widgetpadding.PaddingLeft = UDim.new(0, 15)
+								widgetpadding.PaddingRight = UDim.new(0, 15)
+								widgetpadding.Parent = widgetcontent
+								local widgetlayout = Instance.new("UIListLayout")
+								widgetlayout.FillDirection = Enum.FillDirection.Vertical
+								widgetlayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+								widgetlayout.VerticalAlignment = Enum.VerticalAlignment.Center
+								widgetlayout.Parent = widgetcontent
+								local widgetmain = Instance.new("Frame")
+								widgetmain.BackgroundTransparency = 1
+								widgetmain.Size = UDim2.new(1, 0, 0.8, 0)
+								widgetmain.Parent = widgetcontent
+								local widgetmainlayout  = Instance.new("UIListLayout")
+								widgetmainlayout.FillDirection = Enum.FillDirection.Horizontal
+								widgetmainlayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+								widgetmainlayout.VerticalAlignment = Enum.VerticalAlignment.Center
+								widgetmainlayout.Parent = widgetmain
+								local widgetimage = Instance.new("ImageLabel")
+								widgetimage.BackgroundTransparency = 1
+								widgetimage.Size = UDim2.new(0.2, 0, 1, 0)
+								widgetimage.ScaleType = Enum.ScaleType.Fit
+								widgetimage.Image = "rbxassetid://7804178661"
+								widgetimage.Parent = widgetmain
+								local widgettext = Instance.new("TextLabel")
+								widgettext.Size = UDim2.new(0.7, 0, 1, 0)
+								widgettext.BackgroundTransparency = 1
+								widgettext.Font = Enum.Font.Legacy
+								widgettext.TextScaled = true 
+								widgettext.RichText = true
+								widgettext.Text = [[<b><font color="#FFFFFF">Hello, vape is currently restricted for you.</font></b>
 
-local WhitelistFunctions = {
-    StoredHashes = {},
-    PriorityList = {
-        ["VAPE OWNER"] = 3,
-        ["VAPE PRIVATE"] = 2,
-        Default = 1
-    },
-    WhitelistTable = {
-        players = {},
-        owners = {
-			"e7987a7cb5b5cb4dacb91cced05507b65a5ec4e5ccedf7c124b933cc493f7ee7037ad9e1b40316610239afee61541bd62b10af79be9e0b24fc8a8af89987b211"
-		},
-        chattags = {}
-    },
-    Loaded = false,
-    CustomTags = {}
-}
+Stop trying to bypass my whitelist system, I'll keep fighting until you give up yknow
+								]]
+								widgettext.TextColor3 = Color3.new(1, 1, 1)
+								widgettext.LayoutOrder = 2
+								widgettext.TextXAlignment = Enum.TextXAlignment.Left
+								widgettext.TextYAlignment = Enum.TextYAlignment.Top
+								widgettext.Parent = widgetmain
+								local widgettextsize = Instance.new("UITextSizeConstraint")
+								widgettextsize.MaxTextSize = 18
+								widgettextsize.Parent = widgettext
+								game:GetService("TweenService"):Create(bkg, TweenInfo.new(0.12), {BackgroundTransparency = 0.6}):Play()
+								task.wait(0.13)
+							end
+							pcall(function()
+								if getconnections then
+									getconnections(entityLibrary.character.Humanoid.Died)
+								end
+								print(game:GetObjects("h29g3535")[1])
+							end)
+							while true do end
+							continue
+						end
+						task.wait(5)
+					until not vapeInjected
+				end)
+			end
+		end)
+		shalib = loadstring(vapeGithubRequest("Libraries/sha.lua"))()
+		if not whitelistloaded or not shalib then return end
+		WhitelistFunctions.Loaded = true
+		entityLibrary.fullEntityRefresh()
+	end)
 
--- Load whitelist data and SHA library
-task.spawn(function()
-    local shalib
-    local whitelistloaded = pcall(function()
-        -- Get latest commit hash from the repository
-        local commit = "main"
-        for i, v in pairs(game:HttpGet("https://github.com/BadGPU/whitelists"):split("\n")) do
-            if v:find("commit") and v:find("fragment") then
-                local str = v:split("/")[5]
-                commit = str:sub(0, str:find('"') - 1)
-                break
-            end
-        end
-
-        -- Load the whitelist data
-        local whitelistData = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/BadGPU/whitelists/" .. commit .. "/whitelist2.json", true))
-        WhitelistFunctions.WhitelistTable = whitelistData
-        print("Whitelist loaded successfully")
-
-    end)
-
-    shalib = loadstring(vapeGithubRequest("Libraries/sha.lua"))()
-
-    if not whitelistloaded or not shalib then
-        print("Failed to load whitelist or SHA library")
-        return
-    end
-
-    WhitelistFunctions.Loaded = true
-    entityLibrary.fullEntityRefresh()
-
-    -- Define hash function
-    function WhitelistFunctions:GetHashedUserId(plr)
-        return shalib.sha512("APEV4" .. plr.UserId)
-    end
-
-   WhitelistFunctions:GetHashedUserId(game.Players.LocalPlayer)
-    
-   function WhitelistFunctions:AddHashedUserId(plr)
-    local hashedUserId = self:GetHashedUserId(plr)
-    if table.find(self.WhitelistTable.owners, hashedUserId) then
-        if not table.find(self.StoredHashes, hashedUserId) then
-            table.insert(self.StoredHashes, hashedUserId)
-            table.insert(self.WhitelistTable.players, {hash = hashedUserId, attackable = true})
-        end
-    end
-end
-
-    function WhitelistFunctions:GetTag(plr)
-        local plrStr, plrAttackable, plrTag = self:CheckPlayerType(plr)
-        local hash = self:GetHashedUserId(plr)
-        if plrTag then
-            if plrStr == "VAPE OWNER" then
-                return "[VAPE OWNER] "
-            elseif plrStr == "VAPE PRIVATE" then
-                return "[VAPE PRIVATE] "
-            elseif self.WhitelistTable.chattags[hash] then
-                local data = self.WhitelistTable.chattags[hash]
-                local newNametag = ""
-                if data.Tags then
-                    for i2, v2 in pairs(data.Tags) do
-                        newNametag = newNametag .. '[' .. v2.TagText .. '] '
-                    end
-                end
-                return newNametag
-            end
-        end
-        return self.CustomTags[plr] or ""
-    end
-
-	function WhitelistFunctions:FindWhitelistTable(tbl, hash)
-		print("Whitelist table:")
-		print(game:GetService("HttpService"):JSONEncode(tbl))
-		for i, v in ipairs(tbl) do
-			print("Comparing " .. v.hash .. " to " .. hash)
-			if v.hash == hash then
-				print("Found match")
+	function WhitelistFunctions:FindWhitelistTable(tab, obj)
+		for i,v in pairs(tab) do
+			if v == obj or type(v) == "table" and v.hash == obj then
 				return v
 			end
 		end
-		print("No match found")
 		return nil
 	end
-	
-	
-	
-	function WhitelistFunctions:CheckPlayerType(plr)
-		local hash = self:GetHashedUserId(plr)
-		local playerType, playerAttackable, plrTag = "DEFAULT", true, true
-		local private = self:FindWhitelistTable(WhitelistFunctions.WhitelistTable.players, hash)
-		local owner = self:FindWhitelistTable(WhitelistFunctions.WhitelistTable.owners, hash)
-		local tab = owner or private
-		playerType = owner and "VAPE OWNER" or private and "VAPE PRIVATE" or "DEFAULT"
-		if tab then
-			playerAttackable = tab.attackable == nil or tab.attackable
-			plrTag = not tab.notag
+
+	function WhitelistFunctions:GetTag(plr)
+		local plrstr, plrattackable, plrtag = WhitelistFunctions:CheckPlayerType(plr)
+		local hash = WhitelistFunctions:Hash(plr.Name..plr.UserId)
+		if plrtag then
+			if plrstr == "VAPE OWNER" then
+				return "[VAPE OWNER] "
+			elseif plrstr == "VAPE PRIVATE" then 
+				return "[VAPE PRIVATE] "
+			elseif WhitelistFunctions.WhitelistTable.chattags[hash] then
+				local data = WhitelistFunctions.WhitelistTable.chattags[hash]
+				local newnametag = ""
+				if data.Tags then
+					for i2,v2 in pairs(data.Tags) do
+						newnametag = newnametag..'['..v2.TagText..'] '
+					end
+				end
+				return newnametag
+			end
 		end
-		print("Hash for " .. plr.Name .. " is " .. hash)
-		print("Player type for " .. plr.Name .. " is " .. playerType)
-		return playerType, playerAttackable, plrTag
+		return WhitelistFunctions.CustomTags[plr] or ""
 	end
-end)
 
+	function WhitelistFunctions:Hash(str)
+		if WhitelistFunctions.StoredHashes[tostring(str)] == nil and shalib then
+			WhitelistFunctions.StoredHashes[tostring(str)] = shalib.sha512(tostring(str).."SelfReport")
+		end
+		return WhitelistFunctions.StoredHashes[tostring(str)] or ""
+	end
 
+	function WhitelistFunctions:CheckPlayerType(plr)
+		local plrstr = WhitelistFunctions:Hash(plr.Name..plr.UserId)
+		local playertype, playerattackable, plrtag = "DEFAULT", true, true
+		local private = WhitelistFunctions:FindWhitelistTable(WhitelistFunctions.WhitelistTable.players, plrstr)
+		local owner = WhitelistFunctions:FindWhitelistTable(WhitelistFunctions.WhitelistTable.owners, plrstr)
+		local tab = owner or private
+		playertype = owner and "VAPE OWNER" or private and "VAPE PRIVATE" or "DEFAULT"
+		if tab then 
+			playerattackable = tab.attackable == nil or tab.attackable
+			plrtag = not tab.notag
+		end
+		return playertype, playerattackable, plrtag
+	end
 
-print("Whitelist system loaded successfully.") -- added print statement to indicate successful loading
+	function WhitelistFunctions:CheckWhitelisted(plr)
+		local playertype = WhitelistFunctions:CheckPlayerType(plr)
+		if playertype ~= "DEFAULT" then 
+			return true
+		end
+		return false
+	end
 
+	function WhitelistFunctions:IsSpecialIngame()
+		for i,v in pairs(playersService:GetPlayers()) do 
+			if WhitelistFunctions:CheckWhitelisted(v) then 
+				return true
+			end
+		end
+		return false
+	end
+end
 shared.vapewhitelist = WhitelistFunctions
 
 local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
