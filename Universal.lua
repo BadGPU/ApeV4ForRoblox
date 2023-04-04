@@ -643,38 +643,36 @@ runFunction(function()
 		return pos, Vector3.new(vel.X, 0, vel.Z)
 	end
 
-local function LaunchAngle(v, g, d, h, higherArc)
-    local v2 = v * v
-    local v4 = v2 * v2
-    local root = math.sqrt(v4 - g * (g * d * d + 2 * h * v2))
-    if not higherArc then root = -root end
-    return math.atan((v2 + root) / (g * d))
-end
+	local function LaunchAngle(v: number, g: number, d: number, h: number, higherArc: boolean)
+		local v2 = v * v
+		local v4 = v2 * v2
+		local root = math.sqrt(v4 - g*(g*d*d + 2*h*v2))
+		if not higherArc then root = -root end
+		return math.atan((v2 + root) / (g * d))
+	end
 
-local function LaunchDirection(start, target, v, g, higherArc)
-    local horizontal = Vector3.new(target.X - start.X, 0, target.Z - start.Z)
-    local h = target.Y - start.Y
-    local d = horizontal.Magnitude
-    local a = LaunchAngle(v, g, d, h, higherArc)
-    if a ~= a then return nil end
-    local vec = horizontal.Unit * v
-    local rotAxis = Vector3.new(-horizontal.Z, 0, horizontal.X)
-    return CFrame.fromAxisAngle(rotAxis, a) * vec
-end
+	local function LaunchDirection(start, target, v, g, higherArc: boolean)
+		local horizontal = Vector3.new(target.X - start.X, 0, target.Z - start.Z)
+		local h = target.Y - start.Y
+		local d = horizontal.Magnitude
+		local a = LaunchAngle(v, g, d, h, higherArc)
+		if a ~= a then return nil end
+		local vec = horizontal.Unit * v
+		local rotAxis = Vector3.new(-horizontal.Z, 0, horizontal.X)
+		return CFrame.fromAxisAngle(rotAxis, a) * vec
+	end
 
-local function FindLeadShot(targetPosition, targetVelocity, projectileSpeed, shooterPosition, shooterVelocity, gravity)
-    local distance = (targetPosition - shooterPosition).Magnitude
-    local p = targetPosition - shooterPosition
-    local v = targetVelocity - shooterVelocity
-    local a = Vector3.new(0, -gravity, 0)
-    local timeTaken = (distance / projectileSpeed)
-    local goalX = targetPosition.X + v.X*timeTaken + 0.5 * a.X * timeTaken^2
-    local goalY = targetPosition.Y + v.Y*timeTaken + 0.5 * a.Y * timeTaken^2
-    local goalZ = targetPosition.Z + v.Z*timeTaken + 0.5 * a.Z * timeTaken^2
-    return Vector3.new(goalX, goalY, goalZ)
-end
-
-
+	local function FindLeadShot(targetPosition: Vector3, targetVelocity: Vector3, projectileSpeed: Number, shooterPosition: Vector3, shooterVelocity: Vector3, Gravityity: Number)
+		local distance = (targetPosition - shooterPosition).Magnitude
+		local p = targetPosition - shooterPosition
+		local v = targetVelocity - shooterVelocity
+		local a = Vector3.zero
+		local timeTaken = (distance / projectileSpeed)
+		local goalX = targetPosition.X + v.X*timeTaken + 0.5 * a.X * timeTaken^2
+		local goalY = targetPosition.Y + v.Y*timeTaken + 0.5 * a.Y * timeTaken^2
+		local goalZ = targetPosition.Z + v.Z*timeTaken + 0.5 * a.Z * timeTaken^2
+		return Vector3.new(goalX, goalY, goalZ)
+	end
 
 	local function canClick()
 		local mousepos = inputService:GetMouseLocation() - Vector2.new(0, 36)
